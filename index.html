@@ -4,90 +4,327 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>আমার গেম</title>
+<title>Runner Game</title>
 
 <style>
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
   background: #111;
   color: white;
+  font-family: Arial, sans-serif;
   text-align: center;
 }
 
 h1 {
-  margin: 20px 0 10px;
+  margin: 15px 0 5px;
+}
+
+#info {
+  display: flex;
+  justify-content: space-around;
+  max-width: 420px;
+  margin: 10px auto;
+  font-size: 18px;
 }
 
 #game {
-  width: 90%;
-  max-width: 400px;
-  height: 500px;
+  width: 92%;
+  max-width: 420px;
+  height: 520px;
   margin: auto;
-  background: #333;
   position: relative;
   overflow: hidden;
-  border-radius: 15px;
+  border-radius: 18px;
+  background: linear-gradient(#75c9ff, #e8f7ff);
+  border: 4px solid white;
+}
+
+#road {
+  position: absolute;
+  left: 12%;
+  width: 76%;
+  height: 100%;
+  background: #444;
+}
+
+.line {
+  position: absolute;
+  width: 8px;
+  height: 70px;
+  background: white;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: .8;
 }
 
 #player {
+  position: absolute;
   width: 50px;
-  height: 50px;
-  background: limegreen;
-  position: absolute;
-  bottom: 20px;
-  left: 175px;
-  border-radius: 10px;
+  height: 60px;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 45px;
+  z-index: 5;
 }
 
-#coin {
-  width: 30px;
-  height: 30px;
-  background: gold;
-  border-radius: 50%;
+.coin {
   position: absolute;
-  top: 20px;
-  left: 100px;
+  font-size: 32px;
+  z-index: 4;
 }
 
-button {
-  margin-top: 15px;
-  padding: 12px 25px;
-  font-size: 18px;
-  border: none;
-  border-radius: 8px;
-  background: #00aa55;
+.obstacle {
+  position: absolute;
+  font-size: 40px;
+  z-index: 4;
+}
+
+.controls {
+  margin: 15px auto;
+  max-width: 420px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.controls button,
+#restart {
+  border: 0;
+  border-radius: 12px;
+  padding: 14px 28px;
+  font-size: 22px;
+  background: #00a85a;
   color: white;
+}
+
+#restart {
+  display: none;
+  margin: 15px auto;
+  background: #e53935;
+}
+
+#message {
+  font-size: 20px;
+  font-weight: bold;
 }
 </style>
 </head>
 
 <body>
 
-<h1>🎮 আমার গেম</h1>
-<p>কয়েন ধরুন!</p>
+<h1>🏃 Runner Game</h1>
 
-<div id="game">
-  <div id="player"></div>
-  <div id="coin"></div>
+<div id="info">
+  <div>🏆 Score: <span id="score">0</span></div>
+  <div>❤️ Life: <span id="life">3</span></div>
 </div>
 
-<button onclick="move()">কয়েন ধরুন</button>
+<div id="game">
+
+  <div id="road"></div>
+
+  <div class="line" style="top:20px"></div>
+  <div class="line" style="top:180px"></div>
+  <div class="line" style="top:340px"></div>
+
+  <div id="player">🏃</div>
+
+</div>
+
+<div class="controls">
+  <button onclick="moveLeft()">⬅️</button>
+  <button onclick="moveRight()">➡️</button>
+</div>
+
+<div id="message">🪙 কয়েন সংগ্রহ করুন এবং বাধা এড়ান!</div>
+
+<button id="restart" onclick="restartGame()">🔄 Restart</button>
 
 <script>
+
+const game = document.getElementById("game");
+const player = document.getElementById("player");
+
+let playerX = 50;
 let score = 0;
+let life = 3;
+let gameRunning = true;
 
-function move() {
-  let coin = document.getElementById("coin");
-  let x = Math.floor(Math.random() * 330);
-  let y = Math.floor(Math.random() * 430);
-
-  coin.style.left = x + "px";
-  coin.style.top = y + "px";
-
-  score++;
-  alert("কয়েন ধরেছেন! স্কোর: " + score);
+function updatePlayer() {
+  player.style.left = playerX + "%";
 }
+
+function moveLeft() {
+  if (!gameRunning) return;
+
+  playerX -= 8;
+
+  if (playerX < 20) {
+    playerX = 20;
+  }
+
+  updatePlayer();
+}
+
+function moveRight() {
+  if (!gameRunning) return;
+
+  playerX += 8;
+
+  if (playerX > 80) {
+    playerX = 80;
+  }
+
+  updatePlayer();
+}
+
+document.addEventListener("keydown", function(e) {
+
+  if (e.key === "ArrowLeft") {
+    moveLeft();
+  }
+
+  if (e.key === "ArrowRight") {
+    moveRight();
+  }
+
+});
+
+function randomPosition() {
+  return Math.floor(Math.random() * 55) + 22;
+}
+
+function createCoin() {
+
+  if (!gameRunning) return;
+
+  const coin = document.createElement("div");
+
+  coin.className = "coin";
+  coin.innerHTML = "🪙";
+
+  coin.style.left = randomPosition() + "%";
+  coin.style.top = "-40px";
+
+  game.appendChild(coin);
+
+  let y = -40;
+
+  const timer = setInterval(function() {
+
+    if (!gameRunning) {
+      clearInterval(timer);
+      coin.remove();
+      return;
+    }
+
+    y += 4;
+    coin.style.top = y + "px";
+
+    if (checkCollision(player, coin)) {
+
+      score++;
+      document.getElementById("score").innerText = score;
+
+      clearInterval(timer);
+      coin.remove();
+    }
+
+    if (y > 540) {
+      clearInterval(timer);
+      coin.remove();
+    }
+
+  }, 30);
+}
+
+function createObstacle() {
+
+  if (!gameRunning) return;
+
+  const obstacle = document.createElement("div");
+
+  obstacle.className = "obstacle";
+  obstacle.innerHTML = "🚧";
+
+  obstacle.style.left = randomPosition() + "%";
+  obstacle.style.top = "-50px";
+
+  game.appendChild(obstacle);
+
+  let y = -50;
+
+  const timer = setInterval(function() {
+
+    if (!gameRunning) {
+      clearInterval(timer);
+      obstacle.remove();
+      return;
+    }
+
+    y += 5;
+    obstacle.style.top = y + "px";
+
+    if (checkCollision(player, obstacle)) {
+
+      life--;
+
+      document.getElementById("life").innerText = life;
+
+      clearInterval(timer);
+      obstacle.remove();
+
+      if (life <= 0) {
+        gameOver();
+      }
+    }
+
+    if (y > 540) {
+      clearInterval(timer);
+      obstacle.remove();
+    }
+
+  }, 30);
+}
+
+function checkCollision(a, b) {
+
+  const A = a.getBoundingClientRect();
+  const B = b.getBoundingClientRect();
+
+  return !(
+    A.right < B.left ||
+    A.left > B.right ||
+    A.bottom < B.top ||
+    A.top > B.bottom
+  );
+}
+
+function gameOver() {
+
+  gameRunning = false;
+
+  document.getElementById("message").innerText =
+    "💥 Game Over! আপনার Score: " + score;
+
+  document.getElementById("restart").style.display = "block";
+}
+
+function restartGame() {
+
+  location.reload();
+
+}
+
+setInterval(createCoin, 1200);
+setInterval(createObstacle, 1700);
+
+updatePlayer();
+
 </script>
 
 </body>
