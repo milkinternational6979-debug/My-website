@@ -1,11 +1,94 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="bn">
 <head>
-<title>আমার Website</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>আমার গেম</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #111;
+  color: white;
+  text-align: center;
+}
+
+h1 {
+  margin: 20px 0 10px;
+}
+
+#game {
+  width: 90%;
+  max-width: 400px;
+  height: 500px;
+  margin: auto;
+  background: #333;
+  position: relative;
+  overflow: hidden;
+  border-radius: 15px;
+}
+
+#player {
+  width: 50px;
+  height: 50px;
+  background: limegreen;
+  position: absolute;
+  bottom: 20px;
+  left: 175px;
+  border-radius: 10px;
+}
+
+#coin {
+  width: 30px;
+  height: 30px;
+  background: gold;
+  border-radius: 50%;
+  position: absolute;
+  top: 20px;
+  left: 100px;
+}
+
+button {
+  margin-top: 15px;
+  padding: 12px 25px;
+  font-size: 18px;
+  border: none;
+  border-radius: 8px;
+  background: #00aa55;
+  color: white;
+}
+</style>
 </head>
+
 <body>
-<h1>স্বাগতম!</h1>
-<p>এটি আমার প্রথম Website.</p>
-<button onclick="alert('Website কাজ করছে!')">চাপুন</button>
+
+<h1>🎮 আমার গেম</h1>
+<p>কয়েন ধরুন!</p>
+
+<div id="game">
+  <div id="player"></div>
+  <div id="coin"></div>
+</div>
+
+<button onclick="move()">কয়েন ধরুন</button>
+
+<script>
+let score = 0;
+
+function move() {
+  let coin = document.getElementById("coin");
+  let x = Math.floor(Math.random() * 330);
+  let y = Math.floor(Math.random() * 430);
+
+  coin.style.left = x + "px";
+  coin.style.top = y + "px";
+
+  score++;
+  alert("কয়েন ধরেছেন! স্কোর: " + score);
+}
+</script>
+
 </body>
 </html>
