@@ -4,149 +4,265 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>আমার Game & App</title>
+<title>🎮 My Games & Apps</title>
 
 <style>
-
 *{
-    box-sizing:border-box;
+  box-sizing:border-box;
 }
 
 body{
-    margin:0;
-    font-family:Arial,sans-serif;
-    background:#f2f2f2;
-    color:#222;
-    text-align:center;
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:linear-gradient(135deg,#eef7ff,#f7f1ff);
+  color:#222;
 }
 
-header{
-    background:#00bcd4;
-    color:white;
-    padding:35px 15px;
+.hero{
+  position:relative;
+  overflow:hidden;
+  padding:45px 20px 55px;
+  text-align:center;
+  color:white;
+  background:linear-gradient(135deg,#0066ff,#7b2cff,#00bcd4);
 }
 
-header h1{
-    margin:0 0 10px;
-    font-size:32px;
+.hero:before{
+  content:"🎮   🏎️   🏃   🚀";
+  position:absolute;
+  top:12px;
+  left:0;
+  width:100%;
+  font-size:25px;
+  opacity:.18;
+  letter-spacing:12px;
 }
 
-header p{
-    margin:0;
-    font-size:18px;
+.hero h1{
+  position:relative;
+  margin:10px 0;
+  font-size:34px;
+  text-shadow:0 3px 8px rgba(0,0,0,.25);
+}
+
+.hero p{
+  position:relative;
+  margin:8px 0;
+  font-size:18px;
 }
 
 .container{
-    width:92%;
-    max-width:600px;
-    margin:25px auto;
+  width:92%;
+  max-width:650px;
+  margin:25px auto 40px;
 }
 
-.card{
-    background:white;
-    padding:25px 18px;
-    margin-bottom:20px;
-    border-radius:18px;
-    box-shadow:0 4px 12px rgba(0,0,0,.12);
+.section-title{
+  text-align:center;
+  font-size:27px;
+  margin:25px 0 18px;
 }
 
-.card h2{
-    margin-top:0;
-    font-size:25px;
+.game-card{
+  position:relative;
+  overflow:hidden;
+  margin:18px 0;
+  padding:25px 20px;
+  border-radius:22px;
+  color:white;
+  box-shadow:0 8px 20px rgba(0,0,0,.15);
 }
 
-.card p{
-    font-size:16px;
-    line-height:1.6;
+.game-card.runner{
+  background:linear-gradient(135deg,#087cff,#00bcd4);
 }
 
-.game-button{
-    display:block;
-    padding:16px;
-    margin:15px auto;
-    border-radius:12px;
-    text-decoration:none;
-    color:white;
-    font-size:20px;
-    font-weight:bold;
-    max-width:320px;
+.game-card.car{
+  background:linear-gradient(135deg,#ff6f00,#ffb300);
 }
 
-.runner{
-    background:#2196f3;
+.game-icon{
+  font-size:60px;
+  margin-bottom:8px;
 }
 
-.car{
-    background:#ff9800;
+.game-card h3{
+  margin:5px 0;
+  font-size:27px;
+}
+
+.game-card p{
+  margin:10px auto 18px;
+  font-size:16px;
+  line-height:1.5;
+  max-width:500px;
+}
+
+.play{
+  display:inline-block;
+  padding:14px 28px;
+  border-radius:30px;
+  background:white;
+  color:#222;
+  text-decoration:none;
+  font-size:19px;
+  font-weight:bold;
+  box-shadow:0 4px 10px rgba(0,0,0,.18);
+  transition:.2s;
+}
+
+.play:active{
+  transform:scale(.95);
+}
+
+.future{
+  background:white;
+  padding:25px 18px;
+  border-radius:20px;
+  text-align:center;
+  box-shadow:0 5px 15px rgba(0,0,0,.1);
+}
+
+.future-icons{
+  font-size:40px;
+  margin:12px 0;
+}
+
+.future p{
+  color:#666;
+  line-height:1.5;
+}
+
+.app-card{
+  background:linear-gradient(135deg,#6a11cb,#2575fc);
+  color:white;
+  padding:25px;
+  border-radius:22px;
+  text-align:center;
+  box-shadow:0 8px 20px rgba(0,0,0,.15);
+}
+
+.app-icon{
+  font-size:55px;
+}
+
+.app-card h3{
+  font-size:25px;
+  margin:10px 0;
 }
 
 footer{
-    margin-top:30px;
-    padding:20px;
-    background:#222;
-    color:white;
+  text-align:center;
+  background:#171717;
+  color:#aaa;
+  padding:25px 15px;
+  font-size:14px;
 }
 
+@media(max-width:380px){
+  .hero h1{
+    font-size:28px;
+  }
+
+  .game-icon{
+    font-size:50px;
+  }
+
+  .game-card h3{
+    font-size:23px;
+  }
+}
 </style>
 </head>
 
 <body>
 
-<header>
-    <h1>🎮 আমার Game & App</h1>
-    <p>স্বাগতম! এখানে আমার তৈরি গেম ও অ্যাপ পাবেন।</p>
-</header>
+<!-- HERO -->
+<section class="hero">
+  <h1>🎮 My Games & Apps</h1>
+  <p>আমার তৈরি গেম ও অ্যাপের জগতে স্বাগতম!</p>
+</section>
+
 
 <div class="container">
 
-    <!-- Runner Game -->
-    <div class="card">
+  <!-- GAMES -->
+  <h2 class="section-title">🎮 Games</h2>
 
-        <h2>🏃 Runner Game</h2>
 
-        <p>
-            দৌড়ান, বাধা এড়ান এবং যতদূর সম্ভব যান!
-        </p>
+  <!-- RUNNER GAME -->
+  <div class="game-card runner">
 
-        <a class="game-button runner" href="game.html">
-            🎮 Runner Game খেলুন
-        </a>
+    <div class="game-icon">🏃</div>
 
+    <h3>Runner Game</h3>
+
+    <p>
+      দৌড়ান, বাধা এড়ান এবং যতদূর সম্ভব এগিয়ে যান!
+    </p>
+
+    <a class="play" href="game.html">
+      🎮 খেলুন
+    </a>
+
+  </div>
+
+
+  <!-- CAR GAME -->
+  <div class="game-card car">
+
+    <div class="game-icon">🏎️</div>
+
+    <h3>Retro City Drive</h3>
+
+    <p>
+      পুরনো Nokia-স্টাইলের গাড়ির গেম।
+      অন্য গাড়ি এড়িয়ে City-এর দিকে এগিয়ে যান!
+    </p>
+
+    <a class="play" href="car.html">
+      🏎️ খেলুন
+    </a>
+
+  </div>
+
+
+  <!-- FUTURE GAMES -->
+  <div class="future">
+
+    <h3>🚀 আরও গেম আসছে</h3>
+
+    <div class="future-icons">
+      🎯 🚀 🏍️ 🧩
     </div>
 
+    <p>
+      ভবিষ্যতে এখানে আরও অনেক নতুন গেম যোগ হবে।
+    </p>
 
-    <!-- Car Game -->
-    <div class="card">
-
-        <h2>🏎️ Retro City Drive</h2>
-
-        <p>
-            পুরনো Nokia-স্টাইলের গাড়ির গেম।
-            অন্য গাড়িকে এড়িয়ে City-এর দিকে এগিয়ে যান!
-        </p>
-
-        <a class="game-button car" href="car.html">
-            🏎️ Car Game খেলুন
-        </a>
-
-    </div>
+  </div>
 
 
-    <!-- Apps -->
-    <div class="card">
+  <!-- APPS -->
+  <h2 class="section-title">📱 Apps</h2>
 
-        <h2>📱 Apps</h2>
+  <div class="app-card">
 
-        <p>
-            ভবিষ্যতে আমার তৈরি আরও অ্যাপ এখানে পাওয়া যাবে।
-        </p>
+    <div class="app-icon">📱</div>
 
-    </div>
+    <h3>My Apps</h3>
+
+    <p>
+      ভবিষ্যতে আমার তৈরি বিভিন্ন অ্যাপ এখানে যোগ করা হবে।
+    </p>
+
+  </div>
 
 </div>
 
+
 <footer>
-    © 2026 আমার Game & App
+  © 2026 My Games & Apps
 </footer>
 
 </body>
