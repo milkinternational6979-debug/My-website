@@ -1,126 +1,153 @@
-
 <!DOCTYPE html>
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>আমার Game & App</title>
 
 <style>
-* {
-  box-sizing: border-box;
+
+*{
+    box-sizing:border-box;
 }
 
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #111;
-  color: white;
-  text-align: center;
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f2f2f2;
+    color:#222;
+    text-align:center;
 }
 
-header {
-  padding: 35px 15px;
-  background: linear-gradient(135deg, #00b894, #0984e3);
+header{
+    background:#00bcd4;
+    color:white;
+    padding:35px 15px;
 }
 
-header h1 {
-  margin: 0;
-  font-size: 34px;
+header h1{
+    margin:0 0 10px;
+    font-size:32px;
 }
 
-header p {
-  font-size: 18px;
-  margin-top: 10px;
+header p{
+    margin:0;
+    font-size:18px;
 }
 
-.container {
-  max-width: 600px;
-  margin: auto;
-  padding: 25px 15px;
+.container{
+    width:92%;
+    max-width:600px;
+    margin:25px auto;
 }
 
-.card {
-  background: #222;
-  border-radius: 18px;
-  padding: 25px;
-  margin: 20px 0;
+.card{
+    background:white;
+    padding:25px 18px;
+    margin-bottom:20px;
+    border-radius:18px;
+    box-shadow:0 4px 12px rgba(0,0,0,.12);
 }
 
-.card h2 {
-  margin-top: 0;
-  font-size: 26px;
+.card h2{
+    margin-top:0;
+    font-size:25px;
 }
 
-.card p {
-  color: #ccc;
-  font-size: 16px;
+.card p{
+    font-size:16px;
+    line-height:1.6;
 }
 
-button {
-  border: none;
-  background: #00c853;
-  color: white;
-  padding: 14px 30px;
-  border-radius: 12px;
-  font-size: 18px;
-  font-weight: bold;
+.game-button{
+    display:block;
+    padding:16px;
+    margin:15px auto;
+    border-radius:12px;
+    text-decoration:none;
+    color:white;
+    font-size:20px;
+    font-weight:bold;
+    max-width:320px;
 }
 
-footer {
-  padding: 25px;
-  color: #999;
+.runner{
+    background:#2196f3;
 }
+
+.car{
+    background:#ff9800;
+}
+
+footer{
+    margin-top:30px;
+    padding:20px;
+    background:#222;
+    color:white;
+}
+
 </style>
 </head>
 
 <body>
 
 <header>
-  <h1>🎮 আমার Game & App</h1>
-  <p>আমার তৈরি গেম ও অ্যাপের জগতে স্বাগতম!</p>
+    <h1>🎮 আমার Game & App</h1>
+    <p>স্বাগতম! এখানে আমার তৈরি গেম ও অ্যাপ পাবেন।</p>
 </header>
 
 <div class="container">
 
-  <div class="card">
-    <h2>🏃 Runner Game</h2>
-    <p>দৌড়ান, বাধা এড়ান এবং যত বেশি সম্ভব স্কোর করুন!</p>
+    <!-- Runner Game -->
+    <div class="card">
 
-    <button onclick="location.href='game.html'">
-      🎮 গেম খেলুন
-    </button>
-  </div>
+        <h2>🏃 Runner Game</h2>
 
-  <div class="card">
-    <h2>🎮 আরও গেম আসছে</h2>
-    <p>নতুন নতুন গেম খুব শীঘ্রই এখানে যোগ করা হবে।</p>
-  </div>
+        <p>
+            দৌড়ান, বাধা এড়ান এবং যতদূর সম্ভব যান!
+        </p>
 
-  <div class="card">
-    <h2>📱 Apps</h2>
-    <p>ভবিষ্যতে আমার তৈরি অ্যাপগুলোও এখানে পাওয়া যাবে।</p>
-  </div>
+        <a class="game-button runner" href="game.html">
+            🎮 Runner Game খেলুন
+        </a>
+
+    </div>
+
+
+    <!-- Car Game -->
+    <div class="card">
+
+        <h2>🏎️ Retro City Drive</h2>
+
+        <p>
+            পুরনো Nokia-স্টাইলের গাড়ির গেম।
+            অন্য গাড়িকে এড়িয়ে City-এর দিকে এগিয়ে যান!
+        </p>
+
+        <a class="game-button car" href="car.html">
+            🏎️ Car Game খেলুন
+        </a>
+
+    </div>
+
+
+    <!-- Apps -->
+    <div class="card">
+
+        <h2>📱 Apps</h2>
+
+        <p>
+            ভবিষ্যতে আমার তৈরি আরও অ্যাপ এখানে পাওয়া যাবে।
+        </p>
+
+    </div>
 
 </div>
 
 <footer>
-  © 2026 আমার Game & App
+    © 2026 আমার Game & App
 </footer>
 
 </body>
 </html>
-<a href="car.html" style="
-display:block;
-background:#ff9800;
-color:white;
-padding:15px;
-margin:15px auto;
-border-radius:12px;
-text-decoration:none;
-font-size:20px;
-font-weight:bold;
-max-width:300px;
-">
-🏎️ Car Game খেলুন
-</a>
