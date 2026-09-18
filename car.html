@@ -1,1 +1,511 @@
 
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🏎️ City Drive</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    background:#111;
+    color:white;
+    font-family:Arial,sans-serif;
+    text-align:center;
+}
+
+h1{
+    margin:10px 0 4px;
+    font-size:25px;
+}
+
+#message{
+    font-size:15px;
+    margin-bottom:8px;
+}
+
+#game{
+    position:relative;
+    width:95%;
+    max-width:500px;
+    height:600px;
+    margin:auto;
+    overflow:hidden;
+    border:4px solid white;
+    border-radius:12px;
+    background:#555;
+}
+
+/* আকাশ */
+#sky{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:155px;
+    background:linear-gradient(#55bce8,#c9eff9);
+}
+
+/* শহর */
+#city{
+    position:absolute;
+    top:55px;
+    left:0;
+    width:100%;
+    height:100px;
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    gap:5px;
+    z-index:2;
+}
+
+.building{
+    width:42px;
+    background:#777;
+    border:2px solid #555;
+}
+
+.building:nth-child(1){height:55px}
+.building:nth-child(2){height:85px}
+.building:nth-child(3){height:65px}
+.building:nth-child(4){height:105px}
+.building:nth-child(5){height:75px}
+.building:nth-child(6){height:95px}
+.building:nth-child(7){height:60px}
+
+#cityName{
+    position:absolute;
+    top:12px;
+    width:100%;
+    font-size:22px;
+    font-weight:bold;
+    color:#333;
+    z-index:3;
+}
+
+/* রাস্তা */
+#road{
+    position:absolute;
+    top:145px;
+    bottom:0;
+    left:6%;
+    width:88%;
+    background:#3e3e3e;
+    border-left:6px solid #ddd;
+    border-right:6px solid #ddd;
+}
+
+/* রাস্তার মাঝের দাগ */
+.roadLine{
+    position:absolute;
+    width:7px;
+    height:65px;
+    background:white;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:2;
+}
+
+/* নিজের গাড়ি */
+#player{
+    position:absolute;
+    width:56px;
+    height:82px;
+    bottom:30px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#e53935;
+    border:4px solid white;
+    border-radius:12px;
+    z-index:8;
+}
+
+/* গাড়ির কাচ */
+#player:before,
+.enemy:before{
+    content:"";
+    position:absolute;
+    width:34px;
+    height:27px;
+    left:7px;
+    top:9px;
+    background:#9dddea;
+    border:3px solid #222;
+    border-radius:6px;
+}
+
+/* চাকা */
+.wheel{
+    position:absolute;
+    width:9px;
+    height:22px;
+    background:#111;
+    border-radius:4px;
+    top:22px;
+}
+
+.w1{left:-7px}
+.w2{right:-7px}
+.w3{left:-7px;bottom:12px;top:auto}
+.w4{right:-7px;bottom:12px;top:auto}
+
+/* অন্য গাড়ি */
+.enemy{
+    position:absolute;
+    width:54px;
+    height:80px;
+    border:4px solid white;
+    border-radius:11px;
+    z-index:7;
+}
+
+.red{background:#1565c0}
+.blue{background:#f9a825}
+.green{background:#7b1fa2}
+.black{background:#222}
+
+/* Start */
+#start,
+#gameOver{
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,.82);
+    z-index:20;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+}
+
+#gameOver{
+    display:none;
+}
+
+#start h2,
+#gameOver h2{
+    font-size:30px;
+}
+
+#gameOver h2{
+    color:#ff5252;
+}
+
+.bigButton{
+    padding:14px 30px;
+    border:0;
+    border-radius:12px;
+    background:#00c853;
+    color:white;
+    font-size:20px;
+    font-weight:bold;
+}
+
+/* কন্ট্রোল */
+#controls{
+    display:flex;
+    justify-content:center;
+    gap:25px;
+    margin-top:12px;
+}
+
+.control{
+    width:125px;
+    height:60px;
+    border:0;
+    border-radius:14px;
+    background:#00c853;
+    color:white;
+    font-size:30px;
+    font-weight:bold;
+    touch-action:manipulation;
+}
+
+.control:active{
+    transform:scale(.94);
+}
+</style>
+</head>
+
+<body>
+
+<h1>🏎️ CITY DRIVE</h1>
+<div id="message">ধাক্কা না খেয়ে যতদূর পারবেন যান!</div>
+
+<div id="game">
+
+    <div id="sky"></div>
+
+    <div id="cityName">🏙️ CITY</div>
+
+    <div id="city">
+        <div class="building"></div>
+        <div class="building"></div>
+        <div class="building"></div>
+        <div class="building"></div>
+        <div class="building"></div>
+        <div class="building"></div>
+        <div class="building"></div>
+    </div>
+
+    <div id="road"></div>
+
+    <div class="roadLine" style="top:155px"></div>
+    <div class="roadLine" style="top:280px"></div>
+    <div class="roadLine" style="top:405px"></div>
+    <div class="roadLine" style="top:530px"></div>
+
+    <!-- নিজের গাড়ি -->
+    <div id="player">
+        <div class="wheel w1"></div>
+        <div class="wheel w2"></div>
+        <div class="wheel w3"></div>
+        <div class="wheel w4"></div>
+    </div>
+
+    <!-- Start -->
+    <div id="start">
+        <h2>🏎️ CITY DRIVE</h2>
+        <p>রাস্তার গাড়িগুলোকে এড়িয়ে চলুন</p>
+        <p>🏙️ সামনে City পর্যন্ত যান!</p>
+        <button class="bigButton" id="startButton">▶️ START</button>
+    </div>
+
+    <!-- Game Over -->
+    <div id="gameOver">
+        <h2>💥 ধাক্কা লেগেছে!</h2>
+        <p>আপনার যাত্রা শেষ।</p>
+        <button class="bigButton" id="restartButton">🔄 আবার খেলুন</button>
+    </div>
+
+</div>
+
+<div id="controls">
+    <button class="control" id="leftButton">⬅️</button>
+    <button class="control" id="rightButton">➡️</button>
+</div>
+
+<script>
+
+const game = document.getElementById("game");
+const player = document.getElementById("player");
+const startScreen = document.getElementById("start");
+const gameOverScreen = document.getElementById("gameOver");
+
+const leftButton = document.getElementById("leftButton");
+const rightButton = document.getElementById("rightButton");
+
+let playerX = 0;
+let enemies = [];
+let running = false;
+
+let speed = 4;
+let spawnTimer;
+let gameTimer;
+
+
+/* গেম শুরু */
+function startGame(){
+
+    running = true;
+    speed = 4;
+
+    startScreen.style.display = "none";
+    gameOverScreen.style.display = "none";
+
+    enemies.forEach(enemy => enemy.element.remove());
+    enemies = [];
+
+    playerX = game.clientWidth / 2 - player.offsetWidth / 2;
+    player.style.left = playerX + "px";
+
+    clearInterval(spawnTimer);
+    clearInterval(gameTimer);
+
+    spawnTimer = setInterval(createEnemy, 900);
+    gameTimer = setInterval(updateGame, 20);
+}
+
+
+/* অন্য গাড়ি তৈরি */
+function createEnemy(){
+
+    if(!running) return;
+
+    const roadLeft = game.clientWidth * 0.06;
+    const roadWidth = game.clientWidth * 0.88;
+
+    const lanes = [
+        roadLeft + roadWidth * 0.18,
+        roadLeft + roadWidth * 0.50,
+        roadLeft + roadWidth * 0.82
+    ];
+
+    const lane = lanes[Math.floor(Math.random() * lanes.length)];
+
+    const enemy = document.createElement("div");
+
+    const colors = ["red","blue","green","black"];
+    enemy.className =
+        "enemy " +
+        colors[Math.floor(Math.random() * colors.length)];
+
+    enemy.style.left = (lane - 27) + "px";
+    enemy.style.top = "130px";
+
+    game.appendChild(enemy);
+
+    enemies.push({
+        element: enemy,
+        x: lane - 27,
+        y: 130
+    });
+}
+
+
+/* গেম আপডেট */
+function updateGame(){
+
+    if(!running) return;
+
+    /* রাস্তার দাগ নামবে */
+    document.querySelectorAll(".roadLine").forEach(line => {
+
+        let y = parseFloat(line.style.top);
+
+        y += speed;
+
+        if(y > 650){
+            y = 145;
+        }
+
+        line.style.top = y + "px";
+    });
+
+
+    /* গাড়ি নামবে */
+    for(let i = enemies.length - 1; i >= 0; i--){
+
+        const enemy = enemies[i];
+
+        enemy.y += speed;
+
+        enemy.element.style.top = enemy.y + "px";
+
+
+        /* ধাক্কা */
+        if(isCollision(player, enemy.element)){
+
+            endGame();
+            return;
+        }
+
+
+        /* স্ক্রিনের বাইরে */
+        if(enemy.y > 650){
+
+            enemy.element.remove();
+            enemies.splice(i,1);
+        }
+    }
+
+
+    /* ধীরে ধীরে গতি বাড়বে */
+    if(Math.random() < 0.001){
+        speed += 0.3;
+    }
+}
+
+
+/* Collision */
+function isCollision(a,b){
+
+    const A = a.getBoundingClientRect();
+    const B = b.getBoundingClientRect();
+
+    return !(
+        A.bottom < B.top + 15 ||
+        A.top > B.bottom - 15 ||
+        A.right < B.left + 10 ||
+        A.left > B.right - 10
+    );
+}
+
+
+/* বামে */
+function moveLeft(){
+
+    if(!running) return;
+
+    playerX -= 32;
+
+    const minimum = game.clientWidth * 0.06 + 8;
+
+    if(playerX < minimum){
+        playerX = minimum;
+    }
+
+    player.style.left = playerX + "px";
+}
+
+
+/* ডানে */
+function moveRight(){
+
+    if(!running) return;
+
+    playerX += 32;
+
+    const maximum =
+        game.clientWidth * 0.94 -
+        player.offsetWidth -
+        8;
+
+    if(playerX > maximum){
+        playerX = maximum;
+    }
+
+    player.style.left = playerX + "px";
+}
+
+
+/* Game Over */
+function endGame(){
+
+    running = false;
+
+    clearInterval(spawnTimer);
+    clearInterval(gameTimer);
+
+    gameOverScreen.style.display = "flex";
+}
+
+
+/* Buttons */
+startButton.addEventListener("click", startGame);
+restartButton.addEventListener("click", startGame);
+
+leftButton.addEventListener("click", moveLeft);
+rightButton.addEventListener("click", moveRight);
+
+
+/* কিবোর্ড */
+document.addEventListener("keydown", function(e){
+
+    if(e.key === "ArrowLeft"){
+        moveLeft();
+    }
+
+    if(e.key === "ArrowRight"){
+        moveRight();
+    }
+
+});
+
+</script>
+
+</body>
+</html>
