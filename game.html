@@ -1,1 +1,378 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🏃 Runner Game</title>
 
+<style>
+*{
+  box-sizing:border-box;
+  user-select:none;
+  -webkit-user-select:none;
+}
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#111;
+  color:white;
+  text-align:center;
+}
+
+h1{
+  margin:15px 0 8px;
+  font-size:28px;
+}
+
+#info{
+  display:flex;
+  justify-content:center;
+  gap:25px;
+  font-size:18px;
+  margin-bottom:10px;
+}
+
+#game{
+  position:relative;
+  width:95%;
+  max-width:500px;
+  height:600px;
+  margin:auto;
+  overflow:hidden;
+  background:linear-gradient(to right,#777 0%,#777 10%,#333 10%,#333 90%,#777 90%);
+  border:4px solid white;
+  border-radius:12px;
+}
+
+#roadLine{
+  position:absolute;
+  width:8px;
+  height:100%;
+  left:50%;
+  transform:translateX(-50%);
+  background:repeating-linear-gradient(
+    to bottom,
+    white 0px,
+    white 60px,
+    transparent 60px,
+    transparent 120px
+  );
+  opacity:.8;
+}
+
+#player{
+  position:absolute;
+  width:55px;
+  height:75px;
+  bottom:25px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#00e5ff;
+  border-radius:15px 15px 8px 8px;
+  border:4px solid white;
+  z-index:5;
+}
+
+#player:before{
+  content:"🙂";
+  position:absolute;
+  font-size:35px;
+  top:8px;
+  left:6px;
+}
+
+.obstacle{
+  position:absolute;
+  width:55px;
+  height:70px;
+  background:#ff3333;
+  border:4px solid white;
+  border-radius:10px;
+  z-index:4;
+}
+
+.obstacle:after{
+  content:"🚧";
+  position:absolute;
+  font-size:30px;
+  top:12px;
+  left:7px;
+}
+
+#controls{
+  margin:15px auto;
+  display:flex;
+  justify-content:center;
+  gap:20px;
+}
+
+.control{
+  width:120px;
+  height:60px;
+  font-size:28px;
+  border:none;
+  border-radius:15px;
+  background:#00c853;
+  color:white;
+  font-weight:bold;
+  touch-action:manipulation;
+}
+
+.control:active{
+  transform:scale(.95);
+  background:#009624;
+}
+
+#startBtn,#restartBtn{
+  padding:14px 30px;
+  font-size:20px;
+  border:none;
+  border-radius:12px;
+  background:#2196f3;
+  color:white;
+  font-weight:bold;
+}
+
+#gameOver{
+  display:none;
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.85);
+  z-index:10;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+}
+
+#gameOver h2{
+  font-size:32px;
+  color:#ff4444;
+}
+
+#gameOver p{
+  font-size:22px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🏃 Runner Game</h1>
+
+<div id="info">
+  <div>🏆 Score: <span id="score">0</span></div>
+  <div>❤️ Life: <span id="life">3</span></div>
+</div>
+
+<button id="startBtn">▶️ Game Start</button>
+
+<div id="game">
+
+  <div id="roadLine"></div>
+
+  <div id="player"></div>
+
+  <div id="gameOver">
+    <h2>💥 Game Over!</h2>
+    <p>আপনার Score: <span id="finalScore">0</span></p>
+    <button id="restartBtn">🔄 আবার খেলুন</button>
+  </div>
+
+</div>
+
+<div id="controls">
+  <button class="control" id="leftBtn">⬅️</button>
+  <button class="control" id="rightBtn">➡️</button>
+</div>
+
+<script>
+
+const game = document.getElementById("game");
+const player = document.getElementById("player");
+
+const scoreText = document.getElementById("score");
+const lifeText = document.getElementById("life");
+
+const startBtn = document.getElementById("startBtn");
+const restartBtn = document.getElementById("restartBtn");
+
+const gameOverBox = document.getElementById("gameOver");
+const finalScore = document.getElementById("finalScore");
+
+let playerX;
+let score = 0;
+let life = 3;
+let gameRunning = false;
+
+let obstacles = [];
+let obstacleTimer;
+let gameLoop;
+let speed = 5;
+
+function startGame(){
+
+  gameRunning = true;
+
+  score = 0;
+  life = 3;
+  speed = 5;
+
+  scoreText.textContent = score;
+  lifeText.textContent = life;
+
+  playerX = game.clientWidth / 2 - player.offsetWidth / 2;
+  player.style.left = playerX + "px";
+
+  gameOverBox.style.display = "none";
+  startBtn.style.display = "none";
+
+  obstacles.forEach(o => o.remove());
+  obstacles = [];
+
+  clearInterval(obstacleTimer);
+  clearInterval(gameLoop);
+
+  obstacleTimer = setInterval(createObstacle, 1000);
+
+  gameLoop = setInterval(updateGame, 20);
+}
+
+function createObstacle(){
+
+  if(!gameRunning) return;
+
+  const obstacle = document.createElement("div");
+  obstacle.className = "obstacle";
+
+  const maxX = game.clientWidth - 55;
+  const x = Math.random() * maxX;
+
+  obstacle.style.left = x + "px";
+  obstacle.style.top = "-80px";
+
+  game.appendChild(obstacle);
+
+  obstacles.push({
+    element: obstacle,
+    x: x,
+    y: -80
+  });
+}
+
+function updateGame(){
+
+  if(!gameRunning) return;
+
+  for(let i = obstacles.length - 1; i >= 0; i--){
+
+    const obj = obstacles[i];
+
+    obj.y += speed;
+    obj.element.style.top = obj.y + "px";
+
+    if(checkCollision(obj)){
+
+      obj.element.remove();
+      obstacles.splice(i,1);
+
+      life--;
+      lifeText.textContent = life;
+
+      if(life <= 0){
+        endGame();
+        return;
+      }
+
+      continue;
+    }
+
+    if(obj.y > game.clientHeight){
+
+      obj.element.remove();
+      obstacles.splice(i,1);
+
+      score++;
+      scoreText.textContent = score;
+
+      if(score % 5 === 0){
+        speed += 0.5;
+      }
+    }
+  }
+}
+
+function checkCollision(obj){
+
+  const p = player.getBoundingClientRect();
+  const o = obj.element.getBoundingClientRect();
+
+  return !(
+    p.bottom < o.top ||
+    p.top > o.bottom ||
+    p.right < o.left ||
+    p.left > o.right
+  );
+}
+
+function moveLeft(){
+
+  if(!gameRunning) return;
+
+  playerX -= 30;
+
+  if(playerX < 0){
+    playerX = 0;
+  }
+
+  player.style.left = playerX + "px";
+}
+
+function moveRight(){
+
+  if(!gameRunning) return;
+
+  playerX += 30;
+
+  const maxX = game.clientWidth - player.offsetWidth;
+
+  if(playerX > maxX){
+    playerX = maxX;
+  }
+
+  player.style.left = playerX + "px";
+}
+
+function endGame(){
+
+  gameRunning = false;
+
+  clearInterval(obstacleTimer);
+  clearInterval(gameLoop);
+
+  finalScore.textContent = score;
+  gameOverBox.style.display = "flex";
+}
+
+startBtn.addEventListener("click", startGame);
+restartBtn.addEventListener("click", startGame);
+
+document.getElementById("leftBtn").addEventListener("click", moveLeft);
+document.getElementById("rightBtn").addEventListener("click", moveRight);
+
+document.addEventListener("keydown", function(e){
+
+  if(e.key === "ArrowLeft"){
+    moveLeft();
+  }
+
+  if(e.key === "ArrowRight"){
+    moveRight();
+  }
+
+});
+
+</script>
+
+</body>
+</html>
